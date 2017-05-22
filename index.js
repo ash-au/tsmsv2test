@@ -25,17 +25,76 @@ app.get('/cool', function (request, response) {
     response.send(cool());
 });
 
-//app.get('/sms', function (request, response) {
-//    response.render('pages/sms');
-//});
+app.get('/sendsms', function (request, response) {
+    response.render('pages/sms', {
+        token: access_token
+    });
+});
+
+var cb1 = function (request, response) {
+    //console.log(request.body);
+    var options = {
+        host: "beta-sapi.telstra.com",
+        path: "/v2/messages/sms",
+        json: true,
+        method: 'POST',
+        headers: {
+            'Authorization': "Bearer " + request.body.sms.token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    };
+
+    //console.log(options);
+    var body = '';
+    var price;
+
+    var data = JSON.stringify({
+        "to": request.body.sms.to,
+        "body": request.body.sms.msg,
+        "from": "Telstra",
+        "validity": "60",
+        "priority": false,
+        "notifyURL": "http://my.server.net/message1/"
+    });
+
+    console.log(data);
+
+    var req = https.request(options, function (res) {
+
+        //console.log(res);
+        console.log('STATUS: ' + res.statusCode);
+        //console.log('HEADERS: ' + JSON.stringify(res.headers));
+
+        //res.setEncoding('utf8');
+
+        res.on('data', function (chunk) {
+            body += chunk;
+            //console.log('BODY: ' + chunk);
+        });
+
+        res.on('end', function (chunk) {
+            price = JSON.parse(body);
+            console.log('PRICE: ');
+            console.log(price);
+        });
+    });
+
+    req.write(data);
+    req.end();
+
+    response.send(body);
+}
+
+app.post('/sendsms', cb1);
 
 app.get('/gettoken', function (request, response) {
     response.render('pages/gettoken');
 })
 
-var access_token = "";
+var access_token = "Enter_Token_Here";
 
-var cb = function (request, response) {
+var cb0 = function (request, response) {
     var pathUrl = "/v1/oauth/token?client_id=" + request.body.client.id + "&client_secret=" + request.body.client.secret + "&grant_type=client_credentials&scope=NSMS";
 
     var options = {
@@ -70,7 +129,7 @@ var cb = function (request, response) {
     response.send(access_token);
 }
 
-app.post('/gettoken', cb);
+app.post('/gettoken', cb0);
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
