@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/header.ejs %>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <h1>Telstra SMS V2 Test</h1>
+    </div>
+
+    <form class="form-horizontal" action="/gettoken" method="post">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="client_id">Client ID:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="client[id]" placeholder="Enter Client ID">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="client_secret">Client Secret:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="client[secret]" placeholder="Enter Client Secret">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </div>
+    </form>
+
+</body>
+
+</html>
