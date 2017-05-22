@@ -18,6 +18,10 @@ app.get('/cool', function(request, response) {
   response.send(cool());
 });
 
+app.get('/sms', function(request, response) {
+    response.render('pages/sms');
+})
+
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
