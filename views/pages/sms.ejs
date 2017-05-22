@@ -7,8 +7,10 @@
 
 <body>
 
-    <div class="container-fluid">
-        <h1>Telstra SMS V2 Test</h1>
+    <% include ../partials/nav.ejs %>
+    
+    <div>
+        <p>Token created is <%= token%></p> 
     </div>
 
     <form class="form-horizontal" action="/sendsms" method="post">

@@ -18,12 +18,14 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function (request, response) {
-    response.render('pages/index')
+    response.render('pages/index');
 });
 
-app.get('/cool', function (request, response) {
-    response.send(cool());
-});
+//app.get('/cool', function (request, response) {
+//    response.send(cool());
+//});
+
+var access_token = "Enter_Token_Here";
 
 app.get('/sendsms', function (request, response) {
     response.render('pages/sms', {
@@ -34,29 +36,26 @@ app.get('/sendsms', function (request, response) {
 var cb1 = function (request, response) {
     //console.log(request.body);
     var options = {
-        host: "beta-sapi.telstra.com",
-        path: "/v2/messages/sms",
-        json: true,
-        method: 'POST',
-        headers: {
-            'Authorization': "Bearer " + request.body.sms.token,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    };
-
-    //console.log(options);
-    var body = '';
-    var price;
-
-    var data = JSON.stringify({
-        "to": request.body.sms.to,
-        "body": request.body.sms.msg,
-        "from": "Telstra",
-        "validity": "60",
-        "priority": false,
-        "notifyURL": "http://my.server.net/message1/"
-    });
+            host: "beta-sapi.telstra.com",
+            path: "/v2/messages/sms",
+            json: true,
+            method: 'POST',
+            headers: {
+                'Authorization': "Bearer " + request.body.sms.token,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        },
+        body = '',
+        price,
+        data = JSON.stringify({
+            "to": request.body.sms.to,
+            "body": request.body.sms.msg,
+            "from": "Telstra",
+            "validity": "60",
+            "priority": false,
+            "notifyURL": "http://my.server.net/message1/"
+        });
 
     console.log(data);
 
@@ -92,10 +91,7 @@ app.get('/gettoken', function (request, response) {
     response.render('pages/gettoken');
 })
 
-var access_token = "Enter_Token_Here";
-
 var cb0 = function (request, response) {
-    var pathUrl = "/v1/oauth/token?client_id=" + request.body.client.id + "&client_secret=" + request.body.client.secret + "&grant_type=client_credentials&scope=NSMS";
 
     var options = {
         host: "beta-sapi.telstra.com",
@@ -126,7 +122,20 @@ var cb0 = function (request, response) {
         })
     }).end();
 
-    response.send(access_token);
+    //response.send(access_token);
+    //    response.render('pages/sms', {
+    //    token: access_token
+    //});
+    //pausecomp(1000);
+    response.redirect('/sendsms');
+}
+
+function pausecomp(millis)
+{
+    var date = new Date();
+    var curDate = null;
+    do { curDate = new Date(); }
+    while(curDate-date < millis);
 }
 
 app.post('/gettoken', cb0);
