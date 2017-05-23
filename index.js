@@ -21,10 +21,6 @@ app.get('/', function (request, response) {
     response.render('pages/index');
 });
 
-//app.get('/cool', function (request, response) {
-//    response.send(cool());
-//});
-
 var access_token = "Enter_Token_Here";
 
 app.get('/sendsms', function (request, response) {
@@ -34,7 +30,6 @@ app.get('/sendsms', function (request, response) {
 });
 
 var cb1 = function (request, response) {
-    //console.log(request.body);
     var options = {
             host: "beta-sapi.telstra.com",
             path: "/v2/messages/sms",
@@ -60,13 +55,7 @@ var cb1 = function (request, response) {
     console.log(data);
 
     var req = https.request(options, function (res) {
-
-        //console.log(res);
         console.log('STATUS: ' + res.statusCode);
-        //console.log('HEADERS: ' + JSON.stringify(res.headers));
-
-        //res.setEncoding('utf8');
-
         res.on('data', function (chunk) {
             body += chunk;
             //console.log('BODY: ' + chunk);
@@ -74,8 +63,6 @@ var cb1 = function (request, response) {
 
         res.on('end', function (chunk) {
             price = JSON.parse(body);
-            console.log('PRICE: ');
-            console.log(price);
         });
     });
 
@@ -99,17 +86,10 @@ var cb0 = function (request, response) {
         method: 'GET'
     };
 
-    //console.log(options);
-
     https.request(options, function (res) {
         var body = '';
 
-        //console.log(res);
         console.log('STATUS: ' + res.statusCode);
-        //console.log('HEADERS: ' + JSON.stringify(res.headers));
-
-        //res.setEncoding('utf8');
-
         res.on('data', function (chunk) {
             body += chunk;
             //console.log('BODY: ' + chunk);
@@ -122,11 +102,6 @@ var cb0 = function (request, response) {
         })
     }).end();
 
-    //response.send(access_token);
-    //    response.render('pages/sms', {
-    //    token: access_token
-    //});
-    //pausecomp(1000);
     response.redirect('/sendsms');
 }
 
