@@ -56,19 +56,23 @@ var cb1 = function (request, response) {
 
     var req = https.request(options, function (res) {
         console.log('STATUS: ' + res.statusCode);
+        console.log(res);
         res.on('data', function (chunk) {
             body += chunk;
-            //console.log('BODY: ' + chunk);
+            console.log('BODY: ' + chunk);
         });
 
         res.on('end', function (chunk) {
             price = JSON.parse(body);
+            console.log('PRICE: ');
+            console.log(price);
         });
     });
 
     req.write(data);
     req.end();
 
+    console.log(body);
     response.send(body);
 }
 

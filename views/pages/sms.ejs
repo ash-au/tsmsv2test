@@ -8,36 +8,46 @@
 <body>
 
     <% include ../partials/nav.ejs %>
-    
-    <div>
-        <p>Token created is <%= token%></p> 
-    </div>
 
-    <form class="form-horizontal" action="/sendsms" method="post">
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="token">Token:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="sms[token]" value="<%= token%>">
-            </div>
+        <div>
+            <p>Click on Send SMS link after Get Token process to view your token</p>
+            <p>Token created is
+                <%= token%>
+            </p>
         </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="to_number">To Number:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="sms[to]" value="0418120253">
+
+        <form class="form-horizontal" action="/sendsms" method="post">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="token">Token:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="sms[token]" value="<%= token%>">
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="message">Message:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="sms[msg]" value="Enter Message Text here">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="to_number">To Number:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="sms[to]" value="0418120253">
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Submit</button>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="from">From:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="sms[from]" value="TelstraAPI">
+                </div>
             </div>
-        </div>
-    </form>
+
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="message">Message:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="sms[msg]" value="Enter Message Text here">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </div>
+        </form>
 
 </body>
 
