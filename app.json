@@ -1,8 +1,7 @@
 {
-  "name": "Start on Heroku: Node.js",
-  "description": "A barebones Node.js app using Express 4",
-  "repository": "https://github.com/heroku/node-js-getting-started",
-  "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/master/public/node.svg",
+  "name": "Telstra SMSv2 Test",
+  "description": "Node.js App to test Telstra SMS v2 API",
+  "repository": "https://github.com/ash-au/tsmsv2test.git",
   "keywords": ["node", "express", "heroku"],
   "image": "heroku/nodejs"
 }
