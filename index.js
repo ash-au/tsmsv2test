@@ -1,4 +1,3 @@
-var cool = require('cool-ascii-faces');
 var express = require('express');
 var bodyParser = require('body-parser');
 var https = require('https');
@@ -42,7 +41,18 @@ var cb1 = function (request, response) {
             }
         },
         body = '',
-        price,
+        price, data;
+
+    if (request.body.sms.from) {
+        data = JSON.stringify({
+            "to": request.body.sms.to,
+            "body": request.body.sms.msg,
+            "from": request.body.sms.from,
+            "validity": "60",
+            "priority": false,
+            "notifyURL": "http://my.server.net/message1/"
+        });
+    } else {
         data = JSON.stringify({
             "to": request.body.sms.to,
             "body": request.body.sms.msg,
@@ -51,29 +61,30 @@ var cb1 = function (request, response) {
             "priority": false,
             "notifyURL": "http://my.server.net/message1/"
         });
-
+    }
     console.log(data);
 
     var req = https.request(options, function (res) {
         console.log('STATUS: ' + res.statusCode);
-        console.log(res);
+        //console.log(res);
         res.on('data', function (chunk) {
             body += chunk;
-            console.log('BODY: ' + chunk);
+            //console.log('BODY: ' + chunk);
         });
 
         res.on('end', function (chunk) {
             price = JSON.parse(body);
-            console.log('PRICE: ');
-            console.log(price);
+            console.log(body);
+            console.log("MessageStatus: "+price[0].deliveryStatus);
+            console.log("Message ID: "+price[0].messageId);
+            response.render('pages/data', {
+                data: price
+            });
         });
     });
 
     req.write(data);
     req.end();
-
-    console.log(body);
-    response.send(body);
 }
 
 app.post('/sendsms', cb1);
@@ -104,17 +115,20 @@ var cb0 = function (request, response) {
             access_token = price.access_token;
             console.log(access_token);
         })
+        response.redirect('/sendsms');
+
     }).end();
 
-    response.redirect('/sendsms');
+    //response.redirect('/sendsms');
 }
 
-function pausecomp(millis)
-{
+function pausecomp(millis) {
     var date = new Date();
     var curDate = null;
-    do { curDate = new Date(); }
-    while(curDate-date < millis);
+    do {
+        curDate = new Date();
+    }
+    while (curDate - date < millis);
 }
 
 app.post('/gettoken', cb0);

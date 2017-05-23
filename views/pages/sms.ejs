@@ -9,13 +9,6 @@
 
     <% include ../partials/nav.ejs %>
 
-        <div>
-            <p>Click on Send SMS link after Get Token process to view your token</p>
-            <p>Token created is
-                <%= token%>
-            </p>
-        </div>
-
         <form class="form-horizontal" action="/sendsms" method="post">
             <div class="form-group">
                 <label class="control-label col-sm-2" for="token">Token:</label>
