@@ -21,6 +21,41 @@ app.get('/', function (request, response) {
 });
 
 var access_token = "Enter_Token_Here";
+var globalMessageId = '';
+
+app.get('/getMessageStatus/:id', function (request, response) {
+    console.log(request.params);
+    console.log(request.params.id);
+
+    var options = {
+        host: "beta-sapi.telstra.com",
+        path: "/v2/messages/sms/" + request.params.id,
+        method: 'POST',
+        headers: {
+            'Authorization': "Bearer " + access_token,
+            'Accept': 'application/json'
+        }
+    };
+    console.log(options);
+    
+    var body = '';
+    
+    var req = https.request(options, function (res) {
+        console.log('STATUS: ' + res.statusCode);
+        res.on('data', function (chunk) {
+            body += chunk;
+            console.log('BODY: ' + chunk);
+
+        });
+
+        res.on('end', function (chunk) {
+            price = JSON.parse(body);
+            console.log(price);
+            response.send(body);
+        });
+    });
+
+});
 
 app.get('/sendsms', function (request, response) {
     response.render('pages/sms', {
@@ -66,7 +101,6 @@ var cb1 = function (request, response) {
 
     var req = https.request(options, function (res) {
         console.log('STATUS: ' + res.statusCode);
-        //console.log(res);
         res.on('data', function (chunk) {
             body += chunk;
             //console.log('BODY: ' + chunk);
@@ -74,11 +108,15 @@ var cb1 = function (request, response) {
 
         res.on('end', function (chunk) {
             price = JSON.parse(body);
-            console.log(body);
-            console.log("MessageStatus: "+price[0].deliveryStatus);
-            console.log("Message ID: "+price[0].messageId);
+            console.log(price);
+            var messageArray = price[0].messageId.split("/");
+            globalMessageId = messageArray[messageArray.length - 1];
+            var messageId = "getMessageStatus/" + messageArray[messageArray.length - 1];
+            console.log("MessageStatus: " + price[0].deliveryStatus);
+            console.log("Message ID: " + messageId);
             response.render('pages/data', {
-                data: price
+                deliveryStatus: price[0].deliveryStatus,
+                messageId: messageId
             });
         });
     });
@@ -120,15 +158,6 @@ var cb0 = function (request, response) {
     }).end();
 
     //response.redirect('/sendsms');
-}
-
-function pausecomp(millis) {
-    var date = new Date();
-    var curDate = null;
-    do {
-        curDate = new Date();
-    }
-    while (curDate - date < millis);
 }
 
 app.post('/gettoken', cb0);

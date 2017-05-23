@@ -9,9 +9,14 @@
 
     <% include ../partials/nav.ejs %>
 
-    <p>deliveryStatus <%- data[0].deliveryStatus %></p>
-    <p>messageId <%- data[0].messageId %></p>
-    
+        <p>deliveryStatus
+            <%- deliveryStatus %>
+        </p>
+        <p>messageId
+            <%- messageId %>
+        </p>
+    <a href=<%- messageId %>>Get Message Status</a>
+
 </body>
 
 </html>
