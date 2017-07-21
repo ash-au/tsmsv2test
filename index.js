@@ -1,12 +1,16 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var https = require('https');
+var OAuth = require('oauth');
+var request = require('request');
 
 var app = express();
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
 }));
+
+process.env.NODE_TLS_REJECTED_UNAUTHORIZED = "0";
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -28,7 +32,7 @@ app.get('/getMessageStatus/:id', function (request, response) {
     console.log(request.params.id);
 
     var options = {
-        host: "beta-sapi.telstra.com",
+        host: "slot2.apipractice.t-dev.telstra.net",
         path: "/v2/messages/sms/" + request.params.id,
         method: 'POST',
         headers: {
@@ -37,9 +41,9 @@ app.get('/getMessageStatus/:id', function (request, response) {
         }
     };
     console.log(options);
-    
+
     var body = '';
-    
+
     var req = https.request(options, function (res) {
         console.log('STATUS: ' + res.statusCode);
         res.on('data', function (chunk) {
@@ -65,7 +69,7 @@ app.get('/sendsms', function (request, response) {
 
 var cb1 = function (request, response) {
     var options = {
-            host: "beta-sapi.telstra.com",
+            host: "slot2.apipractice.t-dev.telstra.net",
             path: "/v2/messages/sms",
             json: true,
             method: 'POST',
@@ -134,7 +138,7 @@ app.get('/gettoken', function (request, response) {
 var cb0 = function (request, response) {
 
     var options = {
-        host: "beta-sapi.telstra.com",
+        host: "slot2.apipractice.t-dev.telstra.net",
         path: "/v1/oauth/token?client_id=" + request.body.client.id + "&client_secret=" + request.body.client.secret + "&grant_type=client_credentials&scope=NSMS",
         method: 'GET'
     };
