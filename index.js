@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
 }));
 
-process.env.NODE_TLS_REJECTED_UNAUTHORIZED = "0";
+const TELSTRA_URL="slot2.apipractice.t-dev.telstra.net";
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -32,7 +32,7 @@ app.get('/getMessageStatus/:id', function (request, response) {
     console.log(request.params.id);
 
     var options = {
-        host: "slot2.apipractice.t-dev.telstra.net",
+        host: TELSTRA_URL,
         path: "/v2/messages/sms/" + request.params.id,
         method: 'POST',
         headers: {
@@ -69,7 +69,7 @@ app.get('/sendsms', function (request, response) {
 
 var cb1 = function (request, response) {
     var options = {
-            host: "slot2.apipractice.t-dev.telstra.net",
+            host: TELSTRA_URL,
             path: "/v2/messages/sms",
             json: true,
             method: 'POST',
@@ -113,14 +113,11 @@ var cb1 = function (request, response) {
         res.on('end', function (chunk) {
             price = JSON.parse(body);
             console.log(price);
-            var messageArray = price[0].messageId.split("/");
-            globalMessageId = messageArray[messageArray.length - 1];
-            var messageId = "getMessageStatus/" + messageArray[messageArray.length - 1];
-            console.log("MessageStatus: " + price[0].deliveryStatus);
-            console.log("Message ID: " + messageId);
+            console.log("MessageStatus: " + price.messages[0].deliveryStatus);
+            console.log("Message ID: " + price.messages[0].messageId);
             response.render('pages/data', {
-                deliveryStatus: price[0].deliveryStatus,
-                messageId: messageId
+                deliveryStatus: price.messages[0].deliveryStatus,
+                messageId: price.messages[0].messageId
             });
         });
     });
@@ -138,7 +135,7 @@ app.get('/gettoken', function (request, response) {
 var cb0 = function (request, response) {
 
     var options = {
-        host: "slot2.apipractice.t-dev.telstra.net",
+        host: TELSTRA_URL,
         path: "/v1/oauth/token?client_id=" + request.body.client.id + "&client_secret=" + request.body.client.secret + "&grant_type=client_credentials&scope=NSMS",
         method: 'GET'
     };
